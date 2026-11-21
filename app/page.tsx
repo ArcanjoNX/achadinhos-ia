@@ -829,8 +829,57 @@ export default function Home() {
             className="modal"
             onClick={(e) => e.stopPropagation()}
           >
+            
             <button
               className="close"
               onClick={() => setSelecionado(null)}
             >
+              ×
+            </button>
+
+            <div className="modal-image">
+              <img
+                src={selecionado.imagem}
+                alt={selecionado.nome}
+              />
+            </div>
+
+            <div className="modal-info">
+              <div className="product-category">
+                {selecionado.categoria || "Ofertas"}
+              </div>
+
+              <h2>{selecionado.nome}</h2>
+
+              <div className="modal-price">
+                {money(selecionado.preco)}
+              </div>
+
+              {selecionado.vendas > 0 && (
+                <p style={{ color: "#91a69b", fontSize: 12 }}>
+                  {selecionado.vendas.toLocaleString("pt-BR")} vendas informadas
+                </p>
+              )}
+
+              <a
+                className="buy-button"
+                href={selecionado.link_afiliado}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                COMPRAR NA SHOPEE ↗
+              </a>
+
+              <p style={{ color: "#718078", fontSize: 10, lineHeight: 1.5 }}>
+                Você será direcionado à Shopee para conferir o produto,
+                o preço e as condições de compra.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+    </main>
+  );
+}
+
      
