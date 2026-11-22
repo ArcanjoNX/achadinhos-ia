@@ -33,6 +33,7 @@ export default function Home() {
   const [favoritos, setFavoritos] = useState<number[]>([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState(false);
+  const [mostrarBoasVindas, setMostrarBoasVindas] = useState(true);
 
   useEffect(() => {
     async function carregar() {
@@ -78,7 +79,8 @@ export default function Home() {
     const nome = (p.nome || "").toLowerCase();
     const correspondeBusca = nome.includes(busca.toLowerCase());
     const correspondeCategoria =
-      categoria === "Todas" || (p.categoria || "Ofertas") === categoria;
+      categoria === "Todas" ||
+      (p.categoria || "Ofertas") === categoria;
 
     return correspondeBusca && correspondeCategoria;
   });
@@ -104,12 +106,13 @@ export default function Home() {
 
         body {
           margin: 0;
-          background: #070b0b;
+          background: #050908;
           color: #f4f8f6;
           font-family: Arial, Helvetica, sans-serif;
         }
 
-        button, input {
+        button,
+        input {
           font: inherit;
         }
 
@@ -119,10 +122,11 @@ export default function Home() {
 
         .site {
           min-height: 100vh;
-          background:
-            radial-gradient(ellipse at 50% -20%, #123c2c 0%, transparent 48%),
-            #070b0b;
           overflow: hidden;
+          background:
+            radial-gradient(ellipse at 50% -15%, #174b35 0%, transparent 42%),
+            radial-gradient(ellipse at 100% 45%, #10251c 0%, transparent 35%),
+            #050908;
         }
 
         .container {
@@ -145,52 +149,61 @@ export default function Home() {
         }
 
         .logo span {
-          color: #20e99a;
+          color: #37efa4;
         }
 
         .status {
-          color: #7c9b8c;
-          font-size: 12px;
-          letter-spacing: 1px;
+          color: #8ba99a;
+          font-size: 11px;
+          letter-spacing: 1.5px;
+        }
+
+        .status i {
+          display: inline-block;
+          width: 7px;
+          height: 7px;
+          margin-right: 7px;
+          border-radius: 50%;
+          background: #36efa2;
+          box-shadow: 0 0 12px #36efa2;
         }
 
         .hero {
           text-align: center;
-          padding: 85px 15px 65px;
-          position: relative;
+          padding: 90px 15px 70px;
         }
 
         .eyebrow {
           display: inline-flex;
           align-items: center;
-          gap: 8px;
-          border: 1px solid #1d694b;
+          gap: 9px;
+          border: 1px solid #28694b;
           background: #0b241a;
-          color: #49f5ad;
-          padding: 9px 15px;
+          color: #5af4b1;
+          padding: 10px 17px;
           border-radius: 50px;
-          font-size: 11px;
+          font-size: 10px;
           font-weight: bold;
           letter-spacing: 1.5px;
         }
 
         .hero h1 {
-          font-size: clamp(38px, 7vw, 70px);
-          line-height: 1.05;
-          letter-spacing: -3px;
-          margin: 25px 0 16px;
+          font-size: clamp(39px, 7vw, 76px);
+          line-height: 1.02;
+          letter-spacing: -4px;
+          margin: 27px 0 20px;
         }
 
         .hero h1 span {
-          color: #29e99a;
+          color: #35eca0;
           text-shadow: 0 0 35px #16d98a55;
         }
 
         .hero p {
           color: #9aada4;
-          font-size: 16px;
-          line-height: 1.7;
-          max-width: 550px;
+          font-size: 15px;
+          line-height: 1.8;
+          max-width: 560px;
           margin: auto;
         }
 
@@ -203,25 +216,25 @@ export default function Home() {
         .search-wrap input {
           width: 100%;
           padding: 19px 22px 19px 52px;
-          background: #111a17;
+          background: #101a15;
           color: white;
           border: 1px solid #294238;
-          border-radius: 15px;
+          border-radius: 14px;
           outline: none;
           transition: .25s;
           font-size: 14px;
         }
 
         .search-wrap input:focus {
-          border-color: #27e99a;
+          border-color: #35eca0;
           box-shadow: 0 0 25px #20e99a20;
         }
 
         .search-icon {
           position: absolute;
           left: 19px;
-          top: 17px;
-          font-size: 19px;
+          top: 16px;
+          font-size: 21px;
           color: #38e9a1;
         }
 
@@ -298,7 +311,8 @@ export default function Home() {
           transition: .2s;
         }
 
-        .category:hover, .category.active {
+        .category:hover,
+        .category.active {
           color: #04150d;
           background: #2be99b;
           border-color: #2be99b;
@@ -312,7 +326,7 @@ export default function Home() {
         }
 
         .product {
-          background: linear-gradient(145deg, #151f1a, #0d1310);
+          background: linear-gradient(145deg, #151f1a, #0b110e);
           border: 1px solid #26372e;
           border-radius: 17px;
           overflow: hidden;
@@ -436,6 +450,438 @@ export default function Home() {
           padding: 65px 20px;
           background: #101713;
           border: 1px solid #26372e;
+          border-radius: 18px;
+          color: #9bada3;
+        }
+
+        .empty-icon {
+          font-size: 42px;
+          margin-bottom: 15px;
+        }
+
+        .empty h3 {
+          color: white;
+          font-size: 20px;
+        }
+
+        .loading {
+          text-align: center;
+          padding: 65px 20px;
+          color: #42eaa3;
+        }
+
+        .footer {
+          border-top: 1px solid #ffffff12;
+          padding: 30px 0;
+          text-align: center;
+          color: #718078;
+          font-size: 12px;
+        }
+
+        .modal-bg {
+          position: fixed;
+          inset: 0;
+          z-index: 30;
+          background: #000d;
+          backdrop-filter: blur(12px);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 18px;
+          animation: appear .25s ease;
+        }
+
+        .welcome-modal {
+          width: min(570px, 100%);
+          max-height: 92vh;
+          overflow-y: auto;
+          position: relative;
+          padding: 38px;
+          border: 1px solid #347653;
+          border-radius: 24px;
+          background:
+            radial-gradient(ellipse at 50% 0%, #17452f 0%, transparent 55%),
+            linear-gradient(145deg, #111d16, #080e0b);
+          box-shadow: 0 25px 100px #000c, 0 0 45px #24e99512;
+          text-align: center;
+        }
+
+        .welcome-symbol {
+          width: 62px;
+          height: 62px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 20px;
+          border: 1px solid #3a9d6c;
+          border-radius: 19px;
+          background: #123723;
+          color: #54f4ad;
+          font-size: 29px;
+          box-shadow: 0 0 30px #2be99a22;
+        }
+
+        .welcome-label {
+          color: #58e9a9;
+          font-size: 10px;
+          font-weight: 900;
+          letter-spacing: 3px;
+        }
+
+        .welcome-modal h2 {
+          margin: 10px 0 12px;
+          font-size: clamp(35px, 8vw, 48px);
+          line-height: 1;
+          letter-spacing: -2px;
+          color: #ffffff;
+        }
+
+        .welcome-modal h2 span {
+          color: #39efa3;
+        }
+
+        .welcome-intro {
+          color: #b2c3b9;
+          font-size: 14px;
+          line-height: 1.7;
+          margin: 0 auto 25px;
+          max-width: 420px;
+        }
+
+        .welcome-divider {
+          height: 1px;
+          background: linear-gradient(90deg, transparent, #3c7858, transparent);
+          margin: 23px 0;
+        }
+
+        .welcome-section {
+          text-align: left;
+          padding: 15px 16px;
+          margin-bottom: 11px;
+          border: 1px solid #ffffff12;
+          border-radius: 13px;
+          background: #ffffff06;
+        }
+
+        .welcome-section h3 {
+          display: flex;
+          align-items: center;
+          gap: 9px;
+          margin: 0 0 7px;
+          color: #e9fff2;
+          font-size: 13px;
+        }
+
+        .welcome-section h3 span {
+          color: #48eca5;
+          font-size: 17px;
+        }
+
+        .welcome-section p {
+          color: #9aada3;
+          font-size: 12px;
+          line-height: 1.65;
+          margin: 0;
+        }
+
+        .welcome-time {
+          color: #4df0a8 !important;
+          font-weight: 900;
+        }
+
+        .welcome-warning {
+          border-color: #725d2b;
+          background: #382d131f;
+        }
+
+        .welcome-warning h3 span {
+          color: #ffd16a;
+        }
+
+        .welcome-warning p {
+          color: #c4b99b;
+        }
+
+        .welcome-ok {
+          width: 100%;
+          border: 0;
+          border-radius: 12px;
+          padding: 16px;
+          margin-top: 13px;
+          background: linear-gradient(100deg, #39efa3, #19c77d);
+          color: #03170c;
+          font-size: 13px;
+          font-weight: 900;
+          letter-spacing: 1px;
+          box-shadow: 0 8px 25px #20e99a25;
+          transition: .2s;
+        }
+
+        .welcome-ok:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 30px #20e99a45;
+        }
+
+        .modal {
+          width: min(760px, 100%);
+          background: #111a15;
+          border: 1px solid #32664c;
+          border-radius: 20px;
+          overflow: hidden;
+          position: relative;
+          box-shadow: 0 20px 80px #000a;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .modal-image {
+          background: white;
+          min-height: 330px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .modal-image img {
+          width: 100%;
+          height: 100%;
+          max-height: 430px;
+          object-fit: contain;
+        }
+
+        .modal-info {
+          padding: 35px 25px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+
+        .modal-info h2 {
+          font-size: 19px;
+          line-height: 1.5;
+        }
+
+        .modal-price {
+          font-size: 32px;
+          font-weight: 900;
+          color: #39efa3;
+          margin: 15px 0;
+        }
+
+        .buy-button {
+          display: block;
+          text-align: center;
+          text-decoration: none;
+          background: #2be99a;
+          color: #03160c;
+          padding: 16px;
+          border-radius: 10px;
+          font-size: 12px;
+          font-weight: 900;
+          margin-top: 15px;
+          transition: .2s;
+        }
+
+        .buy-button:hover {
+          transform: scale(1.03);
+          box-shadow: 0 0 25px #2be99a55;
+        }
+
+        .close {
+          position: absolute;
+          right: 12px;
+          top: 12px;
+          z-index: 2;
+          width: 36px;
+          height: 36px;
+          border: 0;
+          border-radius: 50%;
+          color: white;
+          background: #15251c;
+          font-size: 20px;
+        }
+
+        @keyframes appear {
+          from {
+            opacity: 0;
+            transform: translateY(12px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @media (max-width: 950px) {
+          .grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+          }
+        }
+
+        @media (max-width: 650px) {
+          .topbar {
+            height: 65px;
+          }
+
+          .logo {
+            font-size: 20px;
+          }
+
+          .status {
+            font-size: 8px;
+            letter-spacing: .7px;
+          }
+
+          .hero {
+            padding: 65px 5px 45px;
+          }
+
+          .hero h1 {
+            letter-spacing: -2px;
+          }
+
+          .hero p {
+            font-size: 13px;
+          }
+
+          .benefits {
+            gap: 12px;
+            font-size: 10px;
+          }
+
+          .catalog {
+            padding-top: 15px;
+          }
+
+          .section-heading h2 {
+            font-size: 22px;
+          }
+
+          .grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 11px;
+          }
+
+          .product {
+            border-radius: 13px;
+          }
+
+          .product-image {
+            height: 155px;
+          }
+
+          .product-info {
+            padding: 11px;
+          }
+
+          .product-name {
+            font-size: 11px;
+            height: 52px;
+          }
+
+          .price {
+            font-size: 19px;
+          }
+
+          .old-price {
+            display: block;
+            margin: 5px 0 0;
+          }
+
+          .details-button {
+            padding: 11px 5px;
+            font-size: 10px;
+          }
+
+          .welcome-modal {
+            padding: 27px 20px;
+            border-radius: 19px;
+          }
+
+          .welcome-symbol {
+            width: 53px;
+            height: 53px;
+            margin-bottom: 17px;
+          }
+
+          .welcome-section {
+            padding: 13px;
+          }
+
+          .welcome-section p {
+            font-size: 11px;
+          }
+
+          .modal {
+            grid-template-columns: 1fr;
+            max-height: 90vh;
+            overflow-y: auto;
+          }
+
+          .modal-image {
+            min-height: 210px;
+            height: 230px;
+          }
+
+          .modal-image img {
+            max-height: 230px;
+          }
+
+          .modal-info {
+            padding: 20px;
+          }
+
+          .modal-info h2 {
+            font-size: 15px;
+          }
+
+          .modal-price {
+            font-size: 27px;
+          }
+        }
+      `}</style>
+
+      <div className="container">
+        <header className="topbar">
+          <div className="logo">
+            ACHADINHOS<span> IA</span>
+          </div>
+
+          <div className="status">
+            <i />
+            OFERTAS INTELIGENTES
+          </div>
+        </header>
+
+        <section className="hero">
+          <div className="eyebrow">
+            ✦ SEU PRÓXIMO ACHADINHO ESTÁ AQUI
+          </div>
+
+          <h1>
+            Comprar melhor.
+            <br />
+            <span>Economizar mais.</span>
+          </h1>
+
+          <p>
+            Descubra produtos incríveis, encontre ofertas selecionadas
+            e aproveite oportunidades sem perder tempo procurando.
+          </p>
+
+          <div className="search-wrap">
+            <span className="search-icon">⌕</span>
+            <input
+              value={busca}
+              onChange={(e) => setBusca(e.target.value)}
+              placeholder="O que você está procurando?"
+            />
+          </div>
+
+          <div className="benefits">
+            <span>Ofertas selecionadas</span>
+            <span>Acesso à Shopee</span>
+            <span>Novidades free;
           border-radius: 18px;
           color: #9bada3;
         }
