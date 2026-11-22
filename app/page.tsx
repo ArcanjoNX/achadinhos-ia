@@ -16,9 +16,6 @@ type Oferta = {
   categoria: string;
 };
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
 const money = (value: number) =>
   Number(value || 0).toLocaleString("pt-BR", {
     style: "currency",
@@ -37,14 +34,17 @@ export default function Home() {
 
   useEffect(() => {
     async function carregar() {
-      if (!supabaseUrl || !supabaseKey) {
+      const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+      if (!url || !key) {
         setErro(true);
         setCarregando(false);
         return;
       }
 
       try {
-        const supabase = createClient(supabaseUrl, supabaseKey);
+        const supabase = createClient(url, key);
 
         const { data, error } = await supabase
           .from("ofertas")
@@ -77,8 +77,10 @@ export default function Home() {
   );
 
   const filtradas = ofertas.filter((p) => {
-    const nome = (p.nome || "").toLowerCase();
-    const correspondeBusca = nome.includes(busca.toLowerCase());
+    const correspondeBusca = (p.nome || "")
+      .toLowerCase()
+      .includes(busca.toLowerCase());
+
     const correspondeCategoria =
       categoria === "Todas" ||
       (p.categoria || "Ofertas") === categoria;
@@ -586,7 +588,7 @@ export default function Home() {
         }
 
         .welcome-time {
-          color: #4df0a8 !important;
+          color: #4df0a8;
           font-weight: 900;
         }
 
@@ -881,4 +883,254 @@ export default function Home() {
 
           <div className="benefits">
             <span>Ofertas selecionadas</span>
-     
+            <span>Acesso à Shopee</span>
+            <span>Novidades frequentes</span>
+          </div>
+        </section>
+
+        <section className="catalog">
+          <div className="section-heading">
+            <div>
+              <h2>Explore os achadinhos</h2>
+              <p>Oportunidades selecionadas para você.</p>
+            </div>
+
+            <div className="count">
+              {filtradas.length} PRODUTOS
+            </div>
+          </div>
+
+          <div className="categories">
+            {categorias.map((item) => (
+              <button
+                key={item}
+                className={`category ${categoria === item ? "active" : ""}`}
+                onClick={() => setCategoria(item)}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+
+          {carregando ? (
+            <div className="loading">
+              CARREGANDO OFERTAS...
+            </div>
+          ) : erro ? (
+            <div className="empty">
+              <div className="empty-icon">⚠️</div>
+              <h3>Não foi possível carregar as ofertas</h3>
+              <p>Tente novamente em alguns instantes.</p>
+            </div>
+          ) : filtradas.length === 0 ? (
+            <div className="empty">
+              <div className="empty-icon">⌕</div>
+              <h3>Nenhum produto encontrado</h3>
+              <p>Experimente mudar sua busca ou categoria.</p>
+            </div>
+          ) : (
+            <div className="grid">
+              {filtradas.map((p) => (
+                <article className="product" key={p.id}>
+                  <div
+                    className="product-image"
+                    onClick={() => setSelecionado(p)}
+                  >
+                    <img
+                      src={p.imagem}
+                      alt={p.nome}
+                      loading="lazy"
+                    />
+
+                    {p.desconto > 0 && (
+                      <div className="discount">
+                        -{p.desconto}%
+                      </div>
+                    )}
+
+                    <button
+                      className={`heart ${
+                        favoritos.includes(p.id) ? "active" : ""
+                      }`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        alternarFavorito(p.id);
+                      }}
+                      aria-label="Favoritar produto"
+                    >
+                      {favoritos.includes(p.id) ? "♥" : "♡"}
+                    </button>
+                  </div>
+
+                  <div className="product-info">
+                    <div className="product-category">
+                      {p.categoria || "Ofertas"}
+                    </div>
+
+                    <div
+                      className="product-name"
+                      onClick={() => setSelecionado(p)}
+                    >
+                      {p.nome}
+                    </div>
+
+                    <div>
+                      <span className="price">{money(p.preco)}</span>
+
+                      {p.preco_original &&
+                        p.preco_original > p.preco && (
+                          <span className="old-price">
+                            {money(p.preco_original)}
+                          </span>
+                        )}
+                    </div>
+
+                    <button
+                      className="details-button"
+                      onClick={() => setSelecionado(p)}
+                    >
+                      VER PRODUTO ↗
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <footer className="footer">
+          ACHADINHOS IA © 2026 · Encontre. Escolha. Economize.
+        </footer>
+      </div>
+
+      {mostrarBoasVindas && (
+        <div className="modal-bg">
+          <div className="welcome-modal">
+            <div className="welcome-symbol">✦</div>
+
+            <div className="welcome-label">
+              ACHADINHOS IA APRESENTA
+            </div>
+
+            <h2>
+              BEM <span>VINDO</span>
+            </h2>
+
+            <p className="welcome-intro">
+              Seu próximo grande achado pode estar a poucos cliques.
+              Explore oportunidades, descubra produtos e encontre
+              ofertas reunidas em um só lugar.
+            </p>
+
+            <div className="welcome-divider" />
+
+            <div className="welcome-section">
+              <h3>
+                <span>⌕</span>
+                COMO FUNCIONA?
+              </h3>
+              <p>
+                Aqui você encontra produtos e promoções selecionadas.
+                Ao escolher um produto, basta clicar para ser direcionado
+                à Shopee, onde poderá conferir os detalhes e realizar
+                sua compra.
+              </p>
+            </div>
+
+            <div className="welcome-section">
+              <h3>
+                <span>◷</span>
+                OFERTAS NOVAS TODOS OS DIAS
+              </h3>
+              <p>
+                Novas promoções são publicadas diariamente às
+                <strong className="welcome-time">
+                  {" "}08:00, horário local de Naviraí/MS.
+                </strong>
+                {" "}Fique de olho para não perder as oportunidades!
+              </p>
+            </div>
+
+            <div className="welcome-section welcome-warning">
+              <h3>
+                <span>⚠</span>
+                ATENÇÃO ÀS PROMOÇÕES
+              </h3>
+              <p>
+                Oferta boa não costuma esperar! Os preços e descontos
+                podem mudar ou acabar a qualquer momento. Ao chegar
+                à Shopee, confira se a promoção continua ativa e
+                confirme o preço atualizado antes de comprar.
+              </p>
+            </div>
+
+            <button
+              className="welcome-ok"
+              onClick={() => setMostrarBoasVindas(false)}
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
+
+      {selecionado && (
+        <div
+          className="modal-bg"
+          onClick={() => setSelecionado(null)}
+        >
+          <div
+            className="modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="close"
+              onClick={() => setSelecionado(null)}
+            >
+              ×
+            </button>
+
+            <div className="modal-image">
+              <img
+                src={selecionado.imagem}
+                alt={selecionado.nome}
+              />
+            </div>
+
+            <div className="modal-info">
+              <div className="product-category">
+                {selecionado.categoria || "Ofertas"}
+              </div>
+
+              <h2>{selecionado.nome}</h2>
+
+              <div className="modal-price">
+                {money(selecionado.preco)}
+              </div>
+
+              {selecionado.vendas > 0 && (
+                <p style={{ color: "#91a69b", fontSize: 12 }}>
+                  {selecionado.vendas.toLocaleString("pt-BR")} vendas informadas
+                </p>
+              )}
+
+              <a
+                className="buy-button"
+                href={selecionado.link_afiliado}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                COMPRAR NA SHOPEE ↗
+              </a>
+
+              <p style={{ color: "#718078", fontSize: 10, lineHeight: 1.5 }}>
+                Você será direcionado à Shopee para conferir o produto,
+                o preço e as condições de compra.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+    </main>
+  );
+}
